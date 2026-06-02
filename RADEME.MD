@@ -88,7 +88,7 @@ python main.py
 
 ## 기술 및 데이터 흐름
 
-```mermaid
+```
     [K-CBCL PDF 입력]
     -> [pdfplumber 파싱]
     -> [데이터 비식별화 및 마스킹 - 김*사]

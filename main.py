@@ -21,6 +21,12 @@ def main():
     guide_dir = os.path.abspath(os.path.join(current_dir, "data_base", "guide_data"))
     briefing_output_dir = os.path.abspath(os.path.join(current_dir, "output"))
     
+    # 필요한 폴더가 존재하지 않는 경우 자동으로 생성
+    os.makedirs(input_dir, exist_ok=True)
+    os.makedirs(user_data_dir, exist_ok=True)
+    os.makedirs(guide_dir, exist_ok=True)
+    os.makedirs(briefing_output_dir, exist_ok=True)
+    
     # 1단계: PDF에서 데이터 파싱하여 JSON 형태로 저장
     print(f"1단계: PDF 파일 읽는 중: {input_dir}")
     print(f"JSON 결과 저장 경로: {user_data_dir}")
