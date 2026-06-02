@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local configuration
+.env
+
+# Input & Output data (개인정보 및 테스트 리포트 제외)
+input/
+output/
+data_base/user_data/
+
+# Downloaded fonts (자동 다운로드되므로 제외)
+data_base/fonts/
+
+# Temporary / Scratch files
+scratch_pdf_test.py
+test_output.pdf
+
+# IDEs
+.vscode/
+.idea/
