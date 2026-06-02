@@ -81,7 +81,7 @@ docker build -t imomtae .
 
 | 항목                | 상세 정보                                                                                                                                                                                    |
 | :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **사용 모델 / API** | Google AI Studio `gemini-2.5-flash`                                                                            |
+| **사용 모델 / API** | Google AI Studio `gemini-2.5-flash`                                                                                                                                                          |
 | **보안 주의사항**   | 무료 버전 키를 사용하는 경우 전송 데이터가 Google 학습 데이터로 활용될 수 있으므로, 내부 코드에서 **이름 마스킹 알고리즘**을 상시 적용하고 있습니다.                                         |
 | **예상 비용**       | **0원 (무료 티어 기준)** <br> - 분당 최대 15회 호출(15 RPM) 및 일일 1,500회 호출(1,500 RPD) 한도 무료 제공 <br> - 종량제(Paid Tier) 전환 시에도 100만 토큰당 약 $0.1 수준으로 극히 저렴함    |
 | **선택 근거**       | 비식별화가 완료된 데이터의 '일상 언어 번역'이나 '질문 요약' 작업은 고도의 논리 연산이 필요하지 않으므로, 비용이 매우 저렴한 경량 모델(예: GPT-5.4-mini 등) API로 대체하여 유지비를 대폭 절감 |
@@ -112,19 +112,32 @@ docker build -t imomtae .
 3. **LLM API 호출**: 프롬프트 엔지니어링을 통하여 진단명을 배제한 친절한 설명 번역 및 내부 양육 가이드 ID 추천을 처리합니다.
 4. **콘텐츠 매핑 및 출력**: 반환된 AI 요약문과 데이터베이스에서 불러온 추천 양육 가이드 본문을 통합하여 마크다운 리포트(`output/CBCL_스마트_브리핑.md`, `output/CBCL_스마트_브리핑.pdf`)로 최종 저장합니다.
 
-## 📦 입출력 산출물 (Artifacts)
+## 입출력 산출물 (Artifacts)
 
 프로젝트 실행에 필요한 입력 파일 및 환경 설정과, 실행 후 생성되는 주요 결과물에 대한 상세 명세입니다.
 
-### 📥 1. 입력 데이터 및 설정 (Inputs)
-| 위치 | 파일/설정 명칭 | 유형 | 설명 |
-| :--- | :--- | :---: | :--- |
-| `input/` | `AI개발자_테스트자료_CBCL보고서.pdf` | PDF 파일 | 대상 아동의 K-CBCL 결과 보고서 원본 파일 |
-| 루트 (`./`) | `.env` | 설정 파일 | Gemini API 연동을 위한 인증 키 (`AI_API_KEY=...`) |
+### 1. 입력 데이터 및 설정 (Inputs)
+| 위치        | 파일/설정 명칭   |   유형    | 설명                                              |
+| :---------- | :--------------- | :-------: | :------------------------------------------------ |
+| `input/`    | `CBCL보고서.pdf` | PDF 파일  | 대상 아동의 K-CBCL 결과 보고서 원본 파일          |
+| 루트 (`./`) | `.env`           | 설정 파일 | Gemini API 연동을 위한 인증 키 (`AI_API_KEY=...`) |
 
-### 📤 2. 최종 출력 파일 (Outputs)
-| 위치 | 파일명 패턴 | 유형 | 설명 |
-| :--- | :--- | :---: | :--- |
-| `output/` | `{입력파일명}_스마트_브리핑.md` | Markdown | 요약 브리핑 및 추천 육아 가이드가 포함된 마크다운 보고서 |
-| `output/` | `{입력파일명}_스마트_브리핑.pdf` | PDF | 보호자 제공용으로 레이아웃과 폰트가 포맷팅된 PDF 파일 |
-| `data_base/user_data/` | `{입력파일명}.json` | JSON | PDF 파싱 및 비식별화(마스킹) 처리가 완료된 정형 데이터 |
+### 2. 최종 출력 파일 (Outputs)
+| 위치                   | 파일명 패턴                      |   유형   | 설명                                                     |
+| :--------------------- | :------------------------------- | :------: | :------------------------------------------------------- |
+| `output/`              | `{입력파일명}_스마트_브리핑.md`  | Markdown | 요약 브리핑 및 추천 육아 가이드가 포함된 마크다운 보고서 |
+| `output/`              | `{입력파일명}_스마트_브리핑.pdf` |   PDF    | 보호자 제공용으로 레이아웃과 폰트가 포맷팅된 PDF 파일    |
+| `data_base/user_data/` | `{입력파일명}.json`              |   JSON   | PDF 파싱 및 비식별화(마스킹) 처리가 완료된 정형 데이터   |
+
+---
+
+## 🛠️ 주요 소스 코드 역할 (Python Scripts)
+
+프로젝트를 구성하는 각 파이썬 파일의 상세 역할 정보입니다.
+
+| 파일 경로 | 주요 역할 및 기능 |
+| :--- | :--- |
+| **[main.py](file:///C:/Users/sslab/Desktop/insighter_AI_developer_Assignment/main.py)** | 전체 AI 분석 파이프라인의 진입점(Entrypoint). 데이터 폴더 생성 및 파싱(1단계), 스마트 브리핑 생성(2단계) 단계를 순차적으로 실행 및 제어합니다. |
+| **[scr/paser/pdf_parser.py](file:///C:/Users/sslab/Desktop/insighter_AI_developer_Assignment/scr/paser/pdf_parser.py)** | `pdfplumber`를 사용해 K-CBCL PDF 결과 보고서의 표와 구조화된 점수 테이블을 파싱합니다. 아동 정보 중 이름을 비식별화(마스킹) 처리하고 `data_base/user_data/` 폴더에 JSON 형식으로 변환하여 저장합니다. |
+| **[scr/LLM_model/briefing_generator.py](file:///C:/Users/sslab/Desktop/insighter_AI_developer_Assignment/scr/LLM_model/briefing_generator.py)** | 저장된 JSON 아동 데이터를 바탕으로 Gemini API(gemini-2.5-flash)를 연동하여 보호자 설명 번역 및 4가지 가이드 중 최적의 ID(anxiety, attention, social, withdrawal)를 추천받습니다. 이후 추천 가이드 본문을 불러와 최종 결과물(.md 및 .pdf)을 생성합니다. |
+| **[scr/LLM_model/pdf_generator.py](file:///C:/Users/sslab/Desktop/insighter_AI_developer_Assignment/scr/LLM_model/pdf_generator.py)** | `fpdf2` 라이브러리를 사용하여 생성된 브리핑 요약문과 양육 가이드를 보호자가 보기 좋은 레이아웃의 PDF 형식 파일로 변환하여 출력하는 디자인 및 빌드 로직을 담당합니다. |
