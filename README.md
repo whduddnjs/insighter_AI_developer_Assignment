@@ -135,9 +135,7 @@ docker build -t imomtae .
 
 프로젝트를 구성하는 각 파이썬 파일의 상세 역할 정보입니다.
 
-| 파일명 | 주요 역할 및 기능 |
-| :--- | :--- |
-| **[main.py](file:///C:/Users/sslab/Desktop/insighter_AI_developer_Assignment/main.py)** | 전체 AI 분석 파이프라인의 진입점(Entrypoint). 데이터 폴더 생성 및 파싱(1단계), 스마트 브리핑 생성(2단계) 단계를 순차적으로 실행 및 제어합니다. |
-| **[pdf_parser.py](file:///C:/Users/sslab/Desktop/insighter_AI_developer_Assignment/scr/paser/pdf_parser.py)** | `pdfplumber`를 사용해 K-CBCL PDF 결과 보고서의 표와 구조화된 점수 테이블을 파싱합니다. 아동 정보 중 이름을 비식별화(마스킹) 처리하고 `data_base/user_data/` 폴더에 JSON 형식으로 변환하여 저장합니다. |
-| **[briefing_generator.py](file:///C:/Users/sslab/Desktop/insighter_AI_developer_Assignment/scr/LLM_model/briefing_generator.py)** | 저장된 JSON 아동 데이터를 바탕으로 Gemini API(gemini-2.5-flash)를 연동하여 보호자 설명 번역 및 4가지 가이드 중 최적의 ID(anxiety, attention, social, withdrawal)를 추천받습니다. 이후 추천 가이드 본문을 불러와 최종 결과물(.md 및 .pdf)을 생성합니다. |
-| **[pdf_generator.py](file:///C:/Users/sslab/Desktop/insighter_AI_developer_Assignment/scr/LLM_model/pdf_generator.py)** | `fpdf2` 라이브러리를 사용하여 생성된 브리핑 요약문과 양육 가이드를 보호자가 보기 좋은 레이아웃의 PDF 형식 파일로 변환하여 출력하는 디자인 및 빌드 로직을 담당합니다. |
+- **main.py** : 전체 AI 분석 파이프라인의 진입점. 데이터 폴더 생성 및 파싱(1단계), 스마트 브리핑 생성(2단계) 단계를 순차적으로 실행 및 제어합니다.
+- **pdf_parser.py** : K-CBCL PDF 결과 보고서의 표와 구조화된 점수 테이블을 파싱합니다. 아동 정보 중 이름을 비식별화(마스킹) 처리하고 JSON 형식으로 변환하여 저장합니다.
+- **briefing_generator.py** : 저장된 JSON 아동 데이터를 바탕으로 Gemini API를 연동하여 보호자 설명 번역 및 최적의 가이드를 추천받습니다. 이후 추천 가이드 본문을 불러와 최종 결과물(마크다운 및 PDF)을 생성합니다.
+- **pdf_generator.py** : 생성된 브리핑 요약문과 양육 가이드를 보호자가 보기 좋은 레이아웃의 PDF 파일로 변환하여 출력하는 디자인 및 빌드 로직을 담당합니다.
