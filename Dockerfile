@@ -10,17 +10,20 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# 4. 종속성 설치
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# 4. 가상환경 생성
+RUN conda create -n imomtae python=3.12 -y
 
-# 5. 소스 코드, 메인 스크립트 및 데이터베이스 파일 복사
+# 5. 종속성 설치
+COPY requirements.txt .
+RUN conda run -n imomtae pip install --no-cache-dir -r requirements.txt
+
+# 6. 소스 코드, 메인 스크립트 및 데이터베이스 파일 복사
 COPY main.py .
 COPY scr/ ./scr/
 COPY data_base/ ./data_base/
 
-# 6. 볼륨 마운트를 위한 빈 디렉토리 생성
+# 7. 볼륨 마운트를 위한 빈 디렉토리 생성
 RUN mkdir -p input output
 
-# 7. 애플리케이션 실행 명령어
-CMD ["python", "main.py"]
+# 8. 애플리케이션 실행 명령어 (가상환경 내에서 실행)
+CMD ["conda", "run", "--no-capture-output", "-n", "imomtae", "python", "main.py"]

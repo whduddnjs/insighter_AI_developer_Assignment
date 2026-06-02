@@ -44,15 +44,22 @@ AI_API_KEY=발급받은_Gemini_API_키
 
 ### 1. 로컬 개발 환경 실행
 ```bash
-# 종속성 설치
+conda create -n imomtae python=3.12 -y
+conda activate imomtae
+
 pip install -r requirements.txt
 
-# 실행 (input 디렉토리의 .pdf 파일 분석)
 python main.py
 ```
 
 ### 2. 도커(Docker) 환경 실행
-로컬 경로에 무관하게 어디서든 즉시 실행할 수 있도록 환경별 단축 명령어를 제공합니다.
+
+
+```bash
+docker build -t imomtae .
+```
+
+이미지 빌드가 완료되면 아래 단축 명령어를 통해 실행할 수 있습니다:
 
 - **Windows (PowerShell)**:
   ```powershell
@@ -66,6 +73,7 @@ python main.py
   ```bash
   docker run --rm -v "$(pwd)/input:/app/input" -v "$(pwd)/output:/app/output" -v "$(pwd)/data_base/user_data:/app/data_base/user_data" --env-file .env imomtae
   ```
+
 
 ---
 
@@ -109,6 +117,8 @@ python main.py
 - **입력**
 1. input 폴더 : [AI개발자_테스트자료_CBCL보고서.pdf]  
    -> 대상아동의 결과 보고서입니다.
+2. .env 파일 : AI_API_KEY=발급받은_Gemini_API_키  
+   -> 현재 Gemini_API만 구현하여 다른 API는 사용할 수 없습니다.
 - **출력**
 1. output 폴더 : [{입력파일명}_스마트_브리핑.md] 및 [{입력파일명}_스마트_브리핑.pdf]  
    -> LLM으로 요약, 번역된 아동의 브리핑과 그에 맞는 매핑된 가이드, 추천질문 결과입니다. (각각 마크다운 및 PDF 파일)

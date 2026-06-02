@@ -1,3 +1,4 @@
+# env: imomtae
 pdfplumber>=0.10.0
 python-dotenv>=1.2.2
 google-generativeai>=0.3.0
